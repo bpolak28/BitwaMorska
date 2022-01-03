@@ -6,7 +6,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import pl.bpol.model.GamesPlayed;
 import pl.bpol.model.Player;
+import pl.bpol.repository.GamesRepo;
 import pl.bpol.service.GameService;
 import pl.bpol.service.PlayerService;
 
@@ -21,6 +23,9 @@ public class StartController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private GamesRepo gamesRepo;
     
     @RequestMapping("/")
     public String hello() {
@@ -56,6 +61,7 @@ public class StartController {
     @RequestMapping(value = "gameslist")
     public String showGames(ModelMap modelMap){
         modelMap.put("games",gameService.getGames());
+        modelMap.put("gamesPlayed", gamesRepo.findAll());
         return "gameslist";
     }
 

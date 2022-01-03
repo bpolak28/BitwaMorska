@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import pl.bpol.exception.NoSuchPlayerExeption;
 import pl.bpol.model.Field;
 import pl.bpol.model.Game;
+import pl.bpol.model.GamesPlayed;
 import pl.bpol.model.Player;
+import pl.bpol.repository.GamesRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,9 @@ public class GameService {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private GamesRepo gamesRepo;
 
     private List<Game> games;
 
@@ -398,6 +403,7 @@ public class GameService {
 			if(reply.equals("mishit")) {
 				game.changeTurn();	
 			} else if(reply.endsWith("victory")) {
+                gamesRepo.save(new GamesPlayed(game.getHost().getName(), game.getGuest().getName()));
 				games.remove(game);
 			}
 			return reply;
@@ -412,6 +418,7 @@ public class GameService {
 			if(reply.equals("mishit")) {
 				game.changeTurn();	
 			}else if(reply.endsWith("victory")) {
+                gamesRepo.save(new GamesPlayed(game.getGuest().getName(), game.getHost().getName()));
 				games.remove(game);
 			}
 			return reply;
